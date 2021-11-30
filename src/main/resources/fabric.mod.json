@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "lava-java",
+  "id": "lavajava",
   "version": "${version}",
 
   "name": "Lava Java",
-  "description": "A coffee shop at every corner.",
+  "description": "A coffee franchise.",
   "authors": [
     "TigerOfTroy"
   ],
@@ -14,12 +14,15 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/lava-java/icon.png",
+  "icon": "assets/lavajava/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.tigereye.lava-java.LavaJava"
+      "net.tigereye.lavajava.LavaJava"
+    ],
+    "client": [
+      "net.tigereye.lavajava.LavaJavaClient"
     ]
   },
   "mixins": [
