@@ -1,0 +1,10 @@
+{
+  "flavorID": "lavajava:thick",
+  "statusID": "minecraft:resistance",
+  "isDrawback": false,
+  "duration": 3600,
+  "magnitude": 0,
+  "weight": 3,
+  "value": 20,
+  "namePriority": 0
+}

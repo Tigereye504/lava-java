@@ -1,0 +1,10 @@
+{
+  "flavorID": "lavajava:spicy",
+  "statusID": "minecraft:strength",
+  "isDrawback": false,
+  "duration": 7200,
+  "magnitude": 0,
+  "weight": 10,
+  "value": 10,
+  "namePriority": 1
+}

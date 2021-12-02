@@ -1,0 +1,10 @@
+{
+  "flavorID": "lavajava:filling",
+  "statusID": "minecraft:saturation",
+  "isDrawback": false,
+  "duration": 800,
+  "magnitude": 0,
+  "weight": 5,
+  "value": 20,
+  "namePriority": 1
+}

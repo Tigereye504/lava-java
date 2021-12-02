@@ -9,7 +9,7 @@ import net.tigereye.lavajava.model.WitherBaristaModel;
 public class WitherBaristaRenderer  extends MobEntityRenderer<WitherBaristaEntity, WitherBaristaModel<WitherBaristaEntity>> {
 
     public WitherBaristaRenderer(EntityRendererFactory.Context context) {
-        super(context, new WitherBaristaModel(context.getPart(WitherBaristaModel.WITHER_BARISTA_MODEL_LAYER)), 1f);
+        super(context, new WitherBaristaModel(context.getPart(WitherBaristaModel.WITHER_BARISTA_MODEL_LAYER)), .5f);
     }
 
     @Override
