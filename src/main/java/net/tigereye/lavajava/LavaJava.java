@@ -13,7 +13,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.tigereye.lavajava.flavor.FlavorManager;
+import net.tigereye.lavajava.flavor.*;
 import net.tigereye.lavajava.item.LavaJavaItem;
 import net.tigereye.lavajava.mob.WitherBaristaEntity;
 import org.apache.logging.log4j.LogManager;
@@ -31,7 +31,7 @@ public class LavaJava implements ModInitializer {
 			new Identifier("lavajava", "wither_barista"),
 			FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, WitherBaristaEntity::new).dimensions(EntityDimensions.fixed(WitherBaristaEntity.WIDTH, WitherBaristaEntity.HEIGHT)).build()
 	);
-	public static final FoodComponent LAVA_JAVA_FOOD_COMPONENT = new FoodComponent.Builder().hunger(0).saturationModifier(0).alwaysEdible().build();
+	public static final FoodComponent LAVA_JAVA_FOOD_COMPONENT = new FoodComponent.Builder().hunger(4).saturationModifier(.2f).build();
 	public static final LavaJavaItem LAVA_JAVA = new LavaJavaItem(new Item.Settings().maxCount(1).group(ItemGroup.FOOD).food(LAVA_JAVA_FOOD_COMPONENT));
 
 	@Override

@@ -2,5 +2,11 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "lavajava:item/lava_java"
-  }
+  },
+  "overrides": [
+    {"predicate": {"temperature": 0.25}, "model": "lavajava:item/lava_java_room_temperature"},
+    {"predicate": {"temperature": 0.5}, "model": "lavajava:item/lava_java_tepid"},
+    {"predicate": {"temperature": 0.75}, "model": "lavajava:item/lava_java_hot"},
+    {"predicate": {"temperature": 0.9}, "model": "lavajava:item/lava_java"}
+  ]
 }

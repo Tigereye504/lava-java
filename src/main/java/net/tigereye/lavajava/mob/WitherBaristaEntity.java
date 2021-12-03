@@ -36,6 +36,8 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.*;
+import net.minecraft.world.LocalDifficulty;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.tigereye.lavajava.LavaJava;
 import net.tigereye.lavajava.flavor.*;
@@ -45,12 +47,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-//TODO: prevent the wither baristas from despawning from distance/time or peaceful mode
-
 public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchant {
     public static final float HEIGHT =2.4f;
     public static final float WIDTH = 0.7f;
-    private static final int[] LEVEL_BASE_EXPERIENCE = new int[]{0, 25, 70, 150, 250};
+    private static final int[] LEVEL_BASE_EXPERIENCE = new int[]{0, 10, 70, 150, 250};
     private static final int MAX_LEVEL = 5;
     private static final int SHOP_REFRESH_PERIOD = 3200;
 
@@ -67,8 +67,16 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
         super(entityType, world);
     }
 
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+        EntityData entityData2 = super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+        this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(4.0D);
+        this.updateAttackType();
+        setPersistent();
+        return entityData2;
+    }
+
     public static DefaultAttributeContainer.Builder createWitherBaristaAttributes() {
-        return HostileEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 50.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3499999940395355D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 7.0D);
+        return HostileEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 50.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3499999940395355D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4.0D);
     }
 
     @Override
@@ -80,6 +88,10 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
         this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.add(6, new LookAroundGoal(this));
         this.targetSelector.add(1, new RevengeGoal(this, new Class[0]));
+    }
+
+    @Override
+    protected void initEquipment(LocalDifficulty difficulty) {
     }
 
     @Override
@@ -235,6 +247,16 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
         super.mobTick();
     }
 
+    @Override
+    protected void updateDespawnCounter() {
+        this.despawnCounter = 0;
+    }
+
+    @Override
+    protected boolean isDisallowedInPeaceful() {
+        return false;
+    }
+
     protected SoundEvent getTradingSound(boolean sold) {
         return sold ? SoundEvents.ENTITY_WITHER_SKELETON_AMBIENT : SoundEvents.ENTITY_WITHER_SKELETON_HURT;
     }
@@ -257,7 +279,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
         }
         nbt.putInt("tradeXP",this.experience);
         nbt.putInt("tradeLevel",this.level);
-        nbt.putInt("lastShopRefresh",this.level);
+        nbt.putLong("lastShopRefresh",this.lastShopRefresh);
     }
 
     public void readCustomDataFromNbt(NbtCompound nbt) {
@@ -267,6 +289,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
         }
         this.experience = nbt.getInt("tradeXP");
         this.level = nbt.getInt("tradeLevel");
+        this.lastShopRefresh = nbt.getLong("lastShopRefresh");
     }
 
 
@@ -355,7 +378,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
                 }
             }
 
-            int basePrice = 5;
+            int basePrice = 2;
             int positiveCost = 0;
             int positiveCount = 0;
             int negativeDiscount = 0;
@@ -371,7 +394,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
                 }
                 LavaJavaItem.addFlavor(itemStack, flavor.getKey());
             }
-            int nuggets = (int)(basePrice + (positiveCost*(1+positiveCount)/2f) - (negativeDiscount*negativeCount));
+            int nuggets = basePrice + (int)(((positiveCost*(1+positiveCount)/2f) - (negativeDiscount*negativeCount)) / 4);
             int ingots = 0;
             if(nuggets > 64){
                 ingots = Math.min(nuggets / 9, 64);

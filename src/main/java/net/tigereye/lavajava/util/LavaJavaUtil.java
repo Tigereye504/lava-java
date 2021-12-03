@@ -15,7 +15,11 @@ import java.util.Optional;
 public class LavaJavaUtil {
 
     public static StatusEffectInstance convertFlavorToStatusEffect(FlavorData flavor){
-        //TODO: extract flavor
+        return convertFlavorToStatusEffect(flavor,1);
+    }
+
+    public static StatusEffectInstance convertFlavorToStatusEffect(FlavorData flavor, float temperature){
+        //TODO: apply temperature
 
         Optional<StatusEffect> optional = Registry.STATUS_EFFECT.getOrEmpty(flavor.statusID);
         if(optional.isEmpty()){
@@ -23,7 +27,7 @@ public class LavaJavaUtil {
             return null;
         }
         StatusEffect effect = optional.get();
-        return new StatusEffectInstance(effect, flavor.duration, flavor.magnitude);
+        return new StatusEffectInstance(effect, (int)(flavor.duration*Math.max(.25f,temperature)), flavor.magnitude);
     }
 
     public static List<StatusEffectInstance> convertFlavorToStatusEffect(LavaJavaItem drink){
