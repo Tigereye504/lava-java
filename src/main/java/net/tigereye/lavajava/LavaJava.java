@@ -1,5 +1,7 @@
 package net.tigereye.lavajava;
 
+//import io.github.fablabsmc.fablabs.api.bannerpattern.v1.LoomPattern;
+//import io.github.fablabsmc.fablabs.api.bannerpattern.v1.LoomPatterns;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -40,7 +42,8 @@ public class LavaJava implements ModInitializer {
 		FabricDefaultAttributeRegistry.register(WITHER_BARISTA, WitherBaristaEntity.createWitherBaristaAttributes());
 		registerItem("lava_java", LAVA_JAVA);
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new FlavorManager());
-
+		//TODO: once Banners++ updates to 1.18, unlock glorious banners
+		//Registry.register(LoomPatterns.REGISTRY, new Identifier("lavajava", "lava_java_banner"), new LoomPattern(false));
 	}
 
 	private static void registerItem(String name, Item item) {
