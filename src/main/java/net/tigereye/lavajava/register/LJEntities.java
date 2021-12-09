@@ -13,7 +13,7 @@ public class LJEntities {
     public static final EntityType<WitherBaristaEntity> WITHER_BARISTA = Registry.register(
             Registry.ENTITY_TYPE,
             new Identifier("lavajava", "wither_barista"),
-            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, WitherBaristaEntity::new).dimensions(EntityDimensions.fixed(WitherBaristaEntity.WIDTH, WitherBaristaEntity.HEIGHT)).build()
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, WitherBaristaEntity::new).fireImmune().dimensions(EntityDimensions.fixed(WitherBaristaEntity.WIDTH, WitherBaristaEntity.HEIGHT)).build()
     );
 
     public static void register(){

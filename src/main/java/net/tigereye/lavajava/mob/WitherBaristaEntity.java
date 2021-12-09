@@ -292,16 +292,16 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
     static {
         WITHER_BARISTA_TRADES = copyToFastUtilMap(ImmutableMap.of(
                 1, new TradeOffers.Factory[]{
-                        new SellItemFactory(Items.COOKIE, 2, 1, 32, 1),
+                        new SellItemFactory(Items.COOKIE, 2, 1, 8, 1),
                         new SellLavaJavaFactory(0)},
                 2, new TradeOffers.Factory[]{
                         new SellLavaJavaFactory(1),
                         new SellLavaJavaFactory(1)},
                 3, new TradeOffers.Factory[]{
-                        new SellItemFactory(Items.PUMPKIN_PIE, 8, 1, 8, 4),
+                        new SellItemFactory(Items.PUMPKIN_PIE, 8, 1, 3, 4),
                         new SellLavaJavaFactory(2)},
                 4, new TradeOffers.Factory[]{
-                        new SellItemFactory(Blocks.CAKE, 16, 1, 2, 8),
+                        new SellItemFactory(Blocks.CAKE, 16, 1, 1, 8),
                         new SellLavaJavaFactory(3)},
                 5, new TradeOffers.Factory[]{
                         new SellLavaJavaFactory(4),
