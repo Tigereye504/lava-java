@@ -1,10 +1,10 @@
 {
   "flavorID": "lavajava:caffeinated",
-  "statusID": "minecraft:speed",
+  "statusID": "minecraft:haste",
   "isDrawback": false,
   "duration": 7200,
   "magnitude": 0,
-  "weight": 45,
-  "value": 5,
+  "weight": 20,
+  "value": 15,
   "namePriority": 1
 }

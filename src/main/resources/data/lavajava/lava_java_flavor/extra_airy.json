@@ -1,6 +1,6 @@
 {
   "flavorID": "lavajava:extra_airy",
-  "statusID": "minecraft:slow_fall",
+  "statusID": "minecraft:slow_falling",
   "isDrawback": false,
   "duration": 11800,
   "magnitude": 0,

@@ -43,15 +43,19 @@ public class FlavorManager implements SimpleSynchronousResourceReloadListener {
             try(InputStream stream = manager.getResource(id).getInputStream()) {
                 Reader reader = new InputStreamReader(stream);
                 Pair<Identifier,FlavorData> flavorDataPair = SERIALIZER.read(id,new Gson().fromJson(reader,FlavorJsonFormat.class));
-                flavorReferenceMap.put(flavorDataPair.getLeft(),flavorDataPair.getRight());
-                totalWeight += flavorDataPair.getRight().weight;
-                if(flavorDataPair.getRight().isDrawback){
-                    negativeFlavorReferenceMap.put(flavorDataPair.getLeft(),flavorDataPair.getRight());
-                    negativeWeight += flavorDataPair.getRight().weight;
+                if(flavorReferenceMap.containsKey(flavorDataPair.getLeft())){
+                    LavaJava.LOGGER.error("Duplicate flavor " +flavorDataPair.getLeft()+ " found.");
                 }
-                else{
-                    positiveFlavorReferenceMap.put(flavorDataPair.getLeft(),flavorDataPair.getRight());
-                    positiveWeight += flavorDataPair.getRight().weight;
+                else {
+                    flavorReferenceMap.put(flavorDataPair.getLeft(), flavorDataPair.getRight());
+                    totalWeight += flavorDataPair.getRight().weight;
+                    if (flavorDataPair.getRight().isDrawback) {
+                        negativeFlavorReferenceMap.put(flavorDataPair.getLeft(), flavorDataPair.getRight());
+                        negativeWeight += flavorDataPair.getRight().weight;
+                    } else {
+                        positiveFlavorReferenceMap.put(flavorDataPair.getLeft(), flavorDataPair.getRight());
+                        positiveWeight += flavorDataPair.getRight().weight;
+                    }
                 }
             } catch(Exception e) {
                 LavaJava.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
@@ -68,14 +72,17 @@ public class FlavorManager implements SimpleSynchronousResourceReloadListener {
     @Nullable
     public static Pair<Identifier,FlavorData> getWeightedRandomFlavor (Random random) {
         int roll = random.nextInt(totalWeight);
+        int remainingRoll = roll;
         Set<Identifier> flavors = flavorReferenceMap.keySet();
         for(Map.Entry<Identifier,FlavorData> flavor : flavorReferenceMap.entrySet()){
-            roll -= flavor.getValue().weight;
-            if(roll <= 0){
+            remainingRoll -= flavor.getValue().weight;
+            if(remainingRoll <= 0){
                 return new Pair<>(flavor.getKey(),flavor.getValue());
             }
         }
-        LavaJava.LOGGER.error("End of flavor reference map reached. Please reconsider weight calculations!");
+        LavaJava.LOGGER.error("End of flavor reference map reached.");
+        LavaJava.LOGGER.error("Total weight of flavors: " + totalWeight);
+        LavaJava.LOGGER.error("Flavor entry rolled: " + roll);
         return null;
     }
 }

@@ -52,6 +52,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
     public static final float HEIGHT =2.4f;
     public static final float WIDTH = 0.7f;
     private static final int[] LEVEL_BASE_EXPERIENCE = new int[]{0, 10, 70, 150, 250};
+    //private static final int[] LEVEL_BASE_EXPERIENCE = new int[]{0, 10, 60, 80, 100};
     private static final int MAX_LEVEL = 5;
     private static final int SHOP_REFRESH_PERIOD = 3200;
 
@@ -77,7 +78,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
     }
 
     public static DefaultAttributeContainer.Builder createWitherBaristaAttributes() {
-        return HostileEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 50.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3499999940395355D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4.0D);
+        return HostileEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 50.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3499999940395355D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 8.0D);
     }
 
     @Override
@@ -86,7 +87,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
         this.goalSelector.add(3, new EscapeSunlightGoal(this, 1.0D));
         this.goalSelector.add(3, new FleeEntityGoal(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.add(5, new WanderAroundFarGoal(this, 1.0D));
-        this.goalSelector.add(6, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.add(4, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.add(6, new LookAroundGoal(this));
         this.targetSelector.add(1, new RevengeGoal(this, new Class[0]));
     }
@@ -110,7 +111,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
         return customer != null;
     }
 
-    //TODO: make custom factory for wither barista
+
     protected void fillRecipes() {
         TradeOffers.Factory[] factorys = WITHER_BARISTA_TRADES.get(1);
         int i = 1;
@@ -125,34 +126,9 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
             tradeOffer = factorys[1].create(this, this.random);
             if (tradeOffer != null) {offers.add(tradeOffer);}
             i++;
-            factorys = WITHER_BARISTA_TRADES.get(i);
+            factorys = WITHER_BARISTA_TRADES.get(Math.min(i,MAX_LEVEL));
         }
         this.lastShopRefresh = world.getTime();
-    }
-
-    protected void fillRecipesFromPool(TradeOfferList recipeList, TradeOffers.Factory[] pool, int count) {
-        Set<Integer> set = Sets.newHashSet();
-        if (pool.length > count) {
-            while(set.size() < count) {
-                set.add(this.random.nextInt(pool.length));
-            }
-        } else {
-            for(int i = 0; i < pool.length; ++i) {
-                set.add(i);
-            }
-        }
-
-        Iterator var9 = set.iterator();
-
-        while(var9.hasNext()) {
-            Integer integer = (Integer)var9.next();
-            TradeOffers.Factory factory = pool[integer];
-            TradeOffer tradeOffer = factory.create(this, this.random);
-            if (tradeOffer != null) {
-                recipeList.add(tradeOffer);
-            }
-        }
-
     }
 
     @Override
@@ -235,13 +211,24 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
 
     @Override
     protected void mobTick() {
-        if (!this.hasCustomer() && world.getTime() - this.lastShopRefresh > SHOP_REFRESH_PERIOD) {
-            if(level <= MAX_LEVEL && experience > LEVEL_BASE_EXPERIENCE[level]){
-                experience = 0;
-                level++;
+        if (!this.hasCustomer()) {
+            int expToLevel = 0;
+            if(level < MAX_LEVEL){
+                expToLevel = LEVEL_BASE_EXPERIENCE[level];
             }
-            this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200, 0));
-            fillRecipes();
+            else{
+                expToLevel = LEVEL_BASE_EXPERIENCE[MAX_LEVEL-1] * (level-MAX_LEVEL+2);
+            }
+            if(level <= MAX_LEVEL && experience >= expToLevel){
+                //experience = 0;
+                level++;
+                fillRecipes();
+                this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200, 2));
+            }
+            if(world.getTime() - this.lastShopRefresh > SHOP_REFRESH_PERIOD) {
+                fillRecipes();
+                this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 100, 2));
+            }
         }
 
 
@@ -302,16 +289,16 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
     static {
         WITHER_BARISTA_TRADES = copyToFastUtilMap(ImmutableMap.of(
                 1, new TradeOffers.Factory[]{
-                        new WitherBaristaEntity.SellItemFactory(Items.COOKIE, 2, 1, 32, 2),
+                        new WitherBaristaEntity.SellItemFactory(Items.COOKIE, 2, 1, 32, 1),
                         new WitherBaristaEntity.SellLavaJavaFactory(0)},
                 2, new TradeOffers.Factory[]{
                         new WitherBaristaEntity.SellLavaJavaFactory(1),
                         new WitherBaristaEntity.SellLavaJavaFactory(1)},
                 3, new TradeOffers.Factory[]{
-                        new WitherBaristaEntity.SellItemFactory(Items.PUMPKIN_PIE, 8, 1, 8, 10),
+                        new WitherBaristaEntity.SellItemFactory(Items.PUMPKIN_PIE, 8, 1, 8, 4),
                         new WitherBaristaEntity.SellLavaJavaFactory(2)},
                 4, new TradeOffers.Factory[]{
-                        new WitherBaristaEntity.SellItemFactory(Blocks.CAKE, 16, 1, 2, 15),
+                        new WitherBaristaEntity.SellItemFactory(Blocks.CAKE, 16, 1, 2, 8),
                         new WitherBaristaEntity.SellLavaJavaFactory(3)},
                 5, new TradeOffers.Factory[]{
                         new WitherBaristaEntity.SellLavaJavaFactory(4),
@@ -402,7 +389,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
                 nuggets = nuggets % 9;
             }
 
-            return new TradeOffer(new ItemStack(Items.GOLD_NUGGET, nuggets), new ItemStack(Items.GOLD_INGOT, ingots), itemStack, 2, 1+(rolls*rolls*2), 0.2F);
+            return new TradeOffer(new ItemStack(Items.GOLD_NUGGET, nuggets), new ItemStack(Items.GOLD_INGOT, ingots), itemStack, 2, 1+(rolls*rolls*4), 0.2F);
         }
     }
 }

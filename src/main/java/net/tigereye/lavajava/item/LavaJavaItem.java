@@ -14,7 +14,6 @@ import net.minecraft.potion.Potions;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.NbtText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
@@ -25,7 +24,6 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
-import net.tigereye.lavajava.LavaJava;
 import net.tigereye.lavajava.flavor.*;
 import net.tigereye.lavajava.util.LavaJavaUtil;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +35,10 @@ import java.util.List;
 public class LavaJavaItem extends Item {
     private static final int MAX_USE_TIME = 32;
     public static final int TIME_TO_COOL_OFF = 6000;
-
+    public static final float BOILING_TEMPERATURE = .9f;
+    public static final float HOT_TEMPERATURE = .75f;
+    public static final float WARM_TEMPERATURE = .5f;
+    public static final float TEPID_TEMPERATURE = .25f;
     public LavaJavaItem(Item.Settings settings) {
         super(settings);
     }
@@ -127,11 +128,11 @@ public class LavaJavaItem extends Item {
         if(nbtCompound.contains("Lava_Java_Brew_Time")) {
             float temperature = calculateTemperature(stack, world.getTime());
             String temperatureText;
-            if (temperature > .9f) temperatureText = "***Boiling***";
-            else if (temperature > .75f) temperatureText = "**Hot**";
-            else if (temperature > .5f) temperatureText = "*Warm*";
-            else if (temperature > .25f) temperatureText = "Tepid";
-            else temperatureText = "Room Temperature";
+            if (temperature > BOILING_TEMPERATURE) temperatureText = "***Boiling***";
+            else if (temperature > HOT_TEMPERATURE) temperatureText = "**Hot**";
+            else if (temperature > WARM_TEMPERATURE) temperatureText = "*Warm*";
+            else if (temperature > TEPID_TEMPERATURE) temperatureText = "Tepid";
+            else temperatureText = "...stale";
             tooltip.add(new LiteralText(temperatureText));
         }
     }
@@ -166,6 +167,9 @@ public class LavaJavaItem extends Item {
         NbtCompound nbtCompound = item.getOrCreateNbt();
         long timeBrewed = nbtCompound.getLong("Lava_Java_Brew_Time");
         float temperature = 1 - (((float) (time - timeBrewed)) / TIME_TO_COOL_OFF);
+        if(temperature > BOILING_TEMPERATURE){
+            return 1;
+        }
         return temperature;
     }
 }

@@ -1,0 +1,10 @@
+{
+  "flavorID": "lavajava:extra_sweet",
+  "statusID": "minecraft:speed",
+  "isDrawback": false,
+  "duration": 11800,
+  "magnitude": 0,
+  "weight": 9,
+  "value": 10,
+  "namePriority": 1
+}
