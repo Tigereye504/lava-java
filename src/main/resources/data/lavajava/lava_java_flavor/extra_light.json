@@ -1,10 +1,10 @@
 {
-  "flavorID": "lavajava:light",
+  "flavorID": "lavajava:extra_light",
   "statusID": "minecraft:jump_boost",
   "isDrawback": false,
-  "duration": 3600,
+  "duration": 5400,
   "magnitude": 0,
-  "weight": 10,
-  "value": 20,
+  "weight": 2,
+  "value": 40,
   "namePriority": 2
 }

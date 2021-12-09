@@ -1,10 +1,10 @@
 {
-  "flavorID": "lavajava:creamy",
+  "flavorID": "lavajava:extra_creamy",
   "statusID": "minecraft:fire_resistance",
   "isDrawback": false,
-  "duration": 7200,
+  "duration": 11800,
   "magnitude": 0,
-  "weight": 45,
-  "value": 10,
+  "weight": 9,
+  "value": 20,
   "namePriority": 1
 }

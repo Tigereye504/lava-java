@@ -4,7 +4,7 @@
   "isDrawback": false,
   "duration": 3600,
   "magnitude": 0,
-  "weight": 3,
+  "weight": 10,
   "value": 20,
   "namePriority": 0
 }

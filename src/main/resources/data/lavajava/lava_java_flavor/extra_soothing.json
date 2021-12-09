@@ -1,10 +1,10 @@
 {
-  "flavorID": "lavajava:soothing",
+  "flavorID": "lavajava:extra_soothing",
   "statusID": "minecraft:regeneration",
   "isDrawback": false,
-  "duration": 1200,
+  "duration": 1800,
   "magnitude": 0,
-  "weight": 30,
-  "value": 20,
+  "weight": 6,
+  "value": 40,
   "namePriority": 0
 }

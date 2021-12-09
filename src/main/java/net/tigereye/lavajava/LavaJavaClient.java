@@ -10,6 +10,8 @@ import net.minecraft.util.Identifier;
 import net.tigereye.lavajava.item.LavaJavaItem;
 import net.tigereye.lavajava.mob.WitherBaristaEntity;
 import net.tigereye.lavajava.model.WitherBaristaModel;
+import net.tigereye.lavajava.register.LJEntities;
+import net.tigereye.lavajava.register.LJItems;
 import net.tigereye.lavajava.render.WitherBaristaRenderer;
 
 import java.rmi.registry.Registry;
@@ -19,10 +21,10 @@ public class LavaJavaClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        EntityRendererRegistry.INSTANCE.register(LavaJava.WITHER_BARISTA, WitherBaristaRenderer::new);
+        EntityRendererRegistry.INSTANCE.register(LJEntities.WITHER_BARISTA, WitherBaristaRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(WitherBaristaModel.WITHER_BARISTA_MODEL_LAYER, WitherBaristaModel::getTexturedModelData);
 
-        FabricModelPredicateProviderRegistry.register(LavaJava.LAVA_JAVA, new Identifier("temperature"), (itemStack, clientWorld, livingEntity,something) -> {
+        FabricModelPredicateProviderRegistry.register(LJItems.LAVA_JAVA, new Identifier("temperature"), (itemStack, clientWorld, livingEntity, something) -> {
             if (livingEntity == null || clientWorld == null){
                 return .9F;
             }

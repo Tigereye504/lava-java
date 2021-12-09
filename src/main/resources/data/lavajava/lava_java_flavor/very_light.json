@@ -3,8 +3,8 @@
   "statusID": "minecraft:jump_boost",
   "isDrawback": false,
   "duration": 3600,
-  "magnitude": 0,
-  "weight": 10,
-  "value": 20,
+  "magnitude": 1,
+  "weight": 2,
+  "value": 40,
   "namePriority": 2
 }

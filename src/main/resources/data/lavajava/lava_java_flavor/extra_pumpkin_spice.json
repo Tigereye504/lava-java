@@ -1,10 +1,10 @@
 {
-  "flavorID": "lavajava:pumpkin_spice",
+  "flavorID": "lavajava:extra_pumpkin_spice",
   "statusID": "minecraft:luck",
   "isDrawback": false,
-  "duration": 3600,
+  "duration": 5400,
   "magnitude": 0,
-  "weight": 20,
-  "value": 15,
+  "weight": 4,
+  "value": 30,
   "namePriority": 2
 }

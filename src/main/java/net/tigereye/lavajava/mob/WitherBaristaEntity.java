@@ -42,6 +42,7 @@ import net.minecraft.world.World;
 import net.tigereye.lavajava.LavaJava;
 import net.tigereye.lavajava.flavor.*;
 import net.tigereye.lavajava.item.LavaJavaItem;
+import net.tigereye.lavajava.register.LJItems;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -359,14 +360,14 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
 
     private static class SellLavaJavaFactory implements TradeOffers.Factory {
 
-        private static float[] SECOND_FLAVOR_CHANCE = new float[] {0,.5f,.8f,1,1};
-        private static float[] THIRD_FLAVOR_CHANCE = new float[] {0,0,.2f,.6f,1};
+        private static final float[] SECOND_FLAVOR_CHANCE = new float[] {0,.5f,.8f,1,1};
+        private static final float[] THIRD_FLAVOR_CHANCE = new float[] {0,0,.2f,.6f,1};
         int tier;
 
         public SellLavaJavaFactory(int tier){this.tier = tier;}
 
         public TradeOffer create(Entity entity, Random random) {
-            ItemStack itemStack = LavaJava.LAVA_JAVA.getDefaultStack().copy();
+            ItemStack itemStack = LJItems.LAVA_JAVA.getDefaultStack().copy();
             int rolls = 1;
             if(random.nextFloat() < SECOND_FLAVOR_CHANCE[tier]) rolls++;
             if(random.nextFloat() < THIRD_FLAVOR_CHANCE[tier]) rolls++;
