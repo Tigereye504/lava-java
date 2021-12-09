@@ -8,13 +8,10 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.minecraft.util.Identifier;
 import net.tigereye.lavajava.item.LavaJavaItem;
-import net.tigereye.lavajava.mob.WitherBaristaEntity;
 import net.tigereye.lavajava.model.WitherBaristaModel;
 import net.tigereye.lavajava.register.LJEntities;
 import net.tigereye.lavajava.register.LJItems;
 import net.tigereye.lavajava.render.WitherBaristaRenderer;
-
-import java.rmi.registry.Registry;
 
 @Environment(EnvType.CLIENT)
 public class LavaJavaClient implements ClientModInitializer {

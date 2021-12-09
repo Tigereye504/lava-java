@@ -37,8 +37,8 @@ public class LJStructures {
                 .step(GenerationStep.Feature.SURFACE_STRUCTURES)
 
                 .defaultConfig(new StructureConfig(
-                        8, /* average distance apart in chunks between spawn attempts */
-                        2, /* minimum distance apart in chunks between spawn attempts. MUST BE LESS THAN ABOVE VALUE */
+                        LavaJava.config.CAFE_AVERAGE_DISTANCE_CHUNKS, /* average distance apart in chunks between spawn attempts */
+                        LavaJava.config.CAFE_MINIMUM_DISTANCE_CHUNKS, /* minimum distance apart in chunks between spawn attempts. MUST BE LESS THAN ABOVE VALUE */
                         225170915 /* this modifies the seed of the structure so no two structures always spawn over each-other. Make this large and unique. */))
 
                 /*

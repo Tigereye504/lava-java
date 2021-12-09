@@ -18,6 +18,7 @@ import net.minecraft.world.gen.chunk.VerticalBlockSample;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
 import net.tigereye.lavajava.LavaJava;
+import net.tigereye.lavajava.register.LJEntities;
 import org.apache.logging.log4j.Level;
 
 import java.util.Optional;
@@ -46,11 +47,13 @@ public class LavaJavaCafeStructure extends StructureFeature<StructurePoolFeature
      * spawning of the mob that will never stop.
      */
     public static final Pool<SpawnSettings.SpawnEntry> STRUCTURE_MONSTERS = Pool.of(
-            new SpawnSettings.SpawnEntry(EntityType.ZOMBIFIED_PIGLIN, 100, 1, 3)
+            new SpawnSettings.SpawnEntry(EntityType.ZOMBIFIED_PIGLIN, 90, 1, 3),
+            new SpawnSettings.SpawnEntry(LJEntities.WITHER_BARISTA, 10,1,1),
+            new SpawnSettings.SpawnEntry(EntityType.WITHER_SKELETON, 1,1,3)
     );
 
     public static final Pool<SpawnSettings.SpawnEntry> STRUCTURE_CREATURES = Pool.of(
-            new SpawnSettings.SpawnEntry(EntityType.CAT, 30, 1, 1)
+            new SpawnSettings.SpawnEntry(EntityType.CAT, 5, 1, 1)
     );
 
     /*

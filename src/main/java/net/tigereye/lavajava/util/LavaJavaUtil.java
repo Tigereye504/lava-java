@@ -26,15 +26,7 @@ public class LavaJavaUtil {
             return null;
         }
         StatusEffect effect = optional.get();
-        return new StatusEffectInstance(effect, (int)(flavor.duration*Math.max(.25f,durationFactor)), flavor.magnitude);
-    }
-
-    public static List<StatusEffectInstance> convertFlavorToStatusEffect(LavaJavaItem drink){
-        //TODO: extract all flavors
-        List<StatusEffectInstance> effectList = new ArrayList<>();
-        effectList.add(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 10,2));
-        effectList.add(new StatusEffectInstance(StatusEffects.SPEED, 100,2));
-        return effectList;
+        return new StatusEffectInstance(effect, (int)(Math.max(flavor.duration*durationFactor,1)), flavor.magnitude);
     }
 
 

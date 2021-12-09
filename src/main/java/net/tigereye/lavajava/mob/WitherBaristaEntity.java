@@ -1,15 +1,10 @@
 package net.tigereye.lavajava.mob;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -17,15 +12,14 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
@@ -33,12 +27,16 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.village.*;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.village.Merchant;
+import net.minecraft.village.TradeOffer;
+import net.minecraft.village.TradeOfferList;
+import net.minecraft.village.TradeOffers;
+import net.minecraft.world.*;
+import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.world.gen.random.ChunkRandom;
 import net.tigereye.lavajava.LavaJava;
 import net.tigereye.lavajava.flavor.*;
 import net.tigereye.lavajava.item.LavaJavaItem;
@@ -46,7 +44,6 @@ import net.tigereye.lavajava.register.LJItems;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchant {
     public static final float HEIGHT =2.4f;
@@ -54,7 +51,6 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
     private static final int[] LEVEL_BASE_EXPERIENCE = new int[]{0, 10, 70, 150, 250};
     //private static final int[] LEVEL_BASE_EXPERIENCE = new int[]{0, 10, 60, 80, 100};
     private static final int MAX_LEVEL = 5;
-    private static final int SHOP_REFRESH_PERIOD = 3200;
 
     @Nullable
     private PlayerEntity customer;
@@ -96,6 +92,13 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
     protected void initEquipment(LocalDifficulty difficulty) {
     }
 
+    public boolean canSpawn(WorldAccess world, SpawnReason spawnReason) {
+
+        Box exclusionZone = new Box(this.getX() - 32, this.getY() - 32, this.getZ() - 32, this.getX() + 32, this.getY() + 32, this.getZ() + 32);
+        List<WitherBaristaEntity> entities = world.getEntitiesByClass(WitherBaristaEntity.class, exclusionZone, witherBaristaEntity -> true);
+        return entities.size() < LavaJava.config.MAX_BARISTAS_PER_CAFE;
+    }
+
     @Override
     public void setCurrentCustomer(@Nullable PlayerEntity customer) {
         this.customer = customer;
@@ -128,7 +131,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
             i++;
             factorys = WITHER_BARISTA_TRADES.get(Math.min(i,MAX_LEVEL));
         }
-        this.lastShopRefresh = world.getTime();
+        this.lastShopRefresh = world.getTime()/ LavaJava.config.CAFE_REFRESH_PERIOD;
     }
 
     @Override
@@ -225,7 +228,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
                 fillRecipes();
                 this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200, 2));
             }
-            if(world.getTime() - this.lastShopRefresh > SHOP_REFRESH_PERIOD) {
+            if(world.getTime()/LavaJava.config.CAFE_REFRESH_PERIOD != this.lastShopRefresh) {
                 fillRecipes();
                 this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 100, 2));
             }
@@ -289,20 +292,20 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
     static {
         WITHER_BARISTA_TRADES = copyToFastUtilMap(ImmutableMap.of(
                 1, new TradeOffers.Factory[]{
-                        new WitherBaristaEntity.SellItemFactory(Items.COOKIE, 2, 1, 32, 1),
-                        new WitherBaristaEntity.SellLavaJavaFactory(0)},
+                        new SellItemFactory(Items.COOKIE, 2, 1, 32, 1),
+                        new SellLavaJavaFactory(0)},
                 2, new TradeOffers.Factory[]{
-                        new WitherBaristaEntity.SellLavaJavaFactory(1),
-                        new WitherBaristaEntity.SellLavaJavaFactory(1)},
+                        new SellLavaJavaFactory(1),
+                        new SellLavaJavaFactory(1)},
                 3, new TradeOffers.Factory[]{
-                        new WitherBaristaEntity.SellItemFactory(Items.PUMPKIN_PIE, 8, 1, 8, 4),
-                        new WitherBaristaEntity.SellLavaJavaFactory(2)},
+                        new SellItemFactory(Items.PUMPKIN_PIE, 8, 1, 8, 4),
+                        new SellLavaJavaFactory(2)},
                 4, new TradeOffers.Factory[]{
-                        new WitherBaristaEntity.SellItemFactory(Blocks.CAKE, 16, 1, 2, 8),
-                        new WitherBaristaEntity.SellLavaJavaFactory(3)},
+                        new SellItemFactory(Blocks.CAKE, 16, 1, 2, 8),
+                        new SellLavaJavaFactory(3)},
                 5, new TradeOffers.Factory[]{
-                        new WitherBaristaEntity.SellLavaJavaFactory(4),
-                        new WitherBaristaEntity.SellLavaJavaFactory(4)}
+                        new SellLavaJavaFactory(4),
+                        new SellLavaJavaFactory(4)}
         ));
 
     }

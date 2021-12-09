@@ -24,6 +24,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
+import net.tigereye.lavajava.LavaJava;
 import net.tigereye.lavajava.flavor.*;
 import net.tigereye.lavajava.util.LavaJavaUtil;
 import org.jetbrains.annotations.Nullable;
@@ -33,12 +34,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class LavaJavaItem extends Item {
-    private static final int MAX_USE_TIME = 32;
-    public static final int TIME_TO_COOL_OFF = 6000;
-    public static final float BOILING_TEMPERATURE = .9f;
-    public static final float HOT_TEMPERATURE = .75f;
-    public static final float WARM_TEMPERATURE = .5f;
-    public static final float TEPID_TEMPERATURE = .25f;
+    public static final float BOILING_TEMPERATURE = .85f;
+    public static final float HOT_TEMPERATURE = .65f;
+    public static final float WARM_TEMPERATURE = .35f;
+    public static final float TEPID_TEMPERATURE = 0f;
     public LavaJavaItem(Item.Settings settings) {
         super(settings);
     }
@@ -53,7 +52,7 @@ public class LavaJavaItem extends Item {
             List<FlavorData> flavors = new ArrayList<>();
             NbtCompound nbtCompound = stack.getOrCreateNbt();
             NbtCompound flavorNbt = nbtCompound.getCompound("Lava_Java_Flavors");
-            float temperature = calculateTemperature(stack,world.getTime());
+            float temperature = calculateDurationFactor(stack,world.getTime());
             for(String id : flavorNbt.getKeys()){
                 FlavorData flavor = FlavorManager.getFlavor(new Identifier(id));
                 if(flavor != null){
@@ -128,10 +127,10 @@ public class LavaJavaItem extends Item {
         if(nbtCompound.contains("Lava_Java_Brew_Time")) {
             float temperature = calculateTemperature(stack, world.getTime());
             String temperatureText;
-            if (temperature > BOILING_TEMPERATURE) temperatureText = "***Boiling***";
-            else if (temperature > HOT_TEMPERATURE) temperatureText = "**Hot**";
-            else if (temperature > WARM_TEMPERATURE) temperatureText = "*Warm*";
-            else if (temperature > TEPID_TEMPERATURE) temperatureText = "Tepid";
+            if (temperature >= BOILING_TEMPERATURE) temperatureText = "***Boiling***";
+            else if (temperature >= HOT_TEMPERATURE) temperatureText = "**Hot**";
+            else if (temperature >= WARM_TEMPERATURE) temperatureText = "*Warm*";
+            else if (temperature >= TEPID_TEMPERATURE) temperatureText = "Tepid";
             else temperatureText = "...stale";
             tooltip.add(new LiteralText(temperatureText));
         }
@@ -166,10 +165,29 @@ public class LavaJavaItem extends Item {
     public static float calculateTemperature(ItemStack item, long time){
         NbtCompound nbtCompound = item.getOrCreateNbt();
         long timeBrewed = nbtCompound.getLong("Lava_Java_Brew_Time");
-        float temperature = 1 - (((float) (time - timeBrewed)) / TIME_TO_COOL_OFF);
+        return 1 - (((float) (time - timeBrewed)) / LavaJava.config.TIME_UNTIL_STALE);
+    }
+
+    public static float calculateDurationFactor(ItemStack item, long time){
+        float temperature = calculateTemperature(item, time);
+        return calculateDurationFactor(temperature);
+    }
+
+    public static float calculateDurationFactor(float temperature){
         if(temperature > BOILING_TEMPERATURE){
             return 1;
         }
-        return temperature;
+        else if(temperature > HOT_TEMPERATURE){
+            return 1 - LavaJava.config.DURATION_LOST_PER_STAGE;
+        }
+        else if(temperature > WARM_TEMPERATURE){
+            return 1 - LavaJava.config.DURATION_LOST_PER_STAGE * 2;
+        }
+        else if(temperature > TEPID_TEMPERATURE){
+            return 1 - LavaJava.config.DURATION_LOST_PER_STAGE * 3;
+        }
+        else{
+            return 1 - LavaJava.config.DURATION_LOST_PER_STAGE * 4;
+        }
     }
 }

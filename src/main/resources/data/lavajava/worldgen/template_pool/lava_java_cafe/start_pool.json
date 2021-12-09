@@ -6,7 +6,7 @@
     {
       "weight": 1,
       "element": {
-        "location": "lavajava:lava_java_cafe_2",
+        "location": "lavajava:lava_java_cafe",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"

@@ -2,6 +2,8 @@ package net.tigereye.lavajava;
 
 //import io.github.fablabsmc.fablabs.api.bannerpattern.v1.LoomPattern;
 //import io.github.fablabsmc.fablabs.api.bannerpattern.v1.LoomPatterns;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
@@ -20,6 +22,7 @@ import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
+import net.tigereye.lavajava.config.LJConfig;
 import net.tigereye.lavajava.flavor.*;
 import net.tigereye.lavajava.item.LavaJavaItem;
 import net.tigereye.lavajava.mob.WitherBaristaEntity;
@@ -31,17 +34,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class LavaJava implements ModInitializer {
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final String MODID = "lavajava";
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
+	public static LJConfig config;
 
 
 
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Brewing Lava Java.");
+		AutoConfig.register(LJConfig.class, GsonConfigSerializer::new);
+		config = AutoConfig.getConfigHolder(LJConfig.class).getConfig();
+
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new FlavorManager());
 		LJItems.register();
 		LJEntities.register();

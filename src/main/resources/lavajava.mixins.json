@@ -4,6 +4,7 @@
   "package": "net.tigereye.lavajava.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "NoiseChunkGeneratorMixin"
   ],
   "client": [
   ],
