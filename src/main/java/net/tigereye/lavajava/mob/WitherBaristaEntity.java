@@ -116,6 +116,9 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
 
 
     protected void fillRecipes() {
+        if(world.isClient()){
+            return;
+        }
         TradeOffers.Factory[] factorys = WITHER_BARISTA_TRADES.get(1);
         int i = 1;
         if (this.offers == null) {
