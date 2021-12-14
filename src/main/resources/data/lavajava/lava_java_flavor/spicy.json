@@ -6,5 +6,9 @@
   "magnitude": 0,
   "weight": 30,
   "value": 10,
-  "namePriority": 1
+  "namePriority": 1,
+  "exclusions": [
+    "lavajava:extra_spicy",
+    "lavajava:very_spicy"
+  ]
 }

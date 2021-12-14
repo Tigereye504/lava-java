@@ -1,8 +1,11 @@
 package net.tigereye.lavajava.flavor;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+
+import java.util.ArrayList;
 
 public class FlavorSerializer {
     public Pair<Identifier, FlavorData> read(Identifier id, FlavorJsonFormat flavorJson) {
@@ -25,6 +28,7 @@ public class FlavorSerializer {
             throw new JsonSyntaxException("Flavor entry" + id + " must provide a positive value");
         }
 
+
         FlavorData flavorData = new FlavorData();
         Identifier flavorID = new Identifier(flavorJson.flavorID);
         flavorData.statusID = new Identifier(flavorJson.statusID);
@@ -34,6 +38,14 @@ public class FlavorSerializer {
         flavorData.weight = flavorJson.weight;
         flavorData.value = flavorJson.value;
         flavorData.namePriority = flavorJson.namePriority;
+
+        flavorData.exclusions = new ArrayList<>();
+        if (flavorJson.exclusions != null){
+            for (JsonElement exclusion : flavorJson.exclusions) {
+                flavorData.exclusions.add(new Identifier(exclusion.getAsString()));
+            }
+        }
+
         return new Pair<>(flavorID, flavorData);
     }
 }

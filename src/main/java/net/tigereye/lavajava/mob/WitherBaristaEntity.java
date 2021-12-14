@@ -368,7 +368,32 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
             for (int i = 0; i < rolls; i++) {
                 Pair<Identifier, FlavorData> flavor = FlavorManager.getWeightedRandomFlavor(random);
                 if(flavor != null){
-                    flavors.put(flavor.getLeft(),flavor.getRight());
+                    boolean badResult = false;
+                    if(flavors.containsKey(flavor.getLeft())) badResult = true;
+                    if(!badResult) {
+                        //if any existing flavors are excluded by this flavor, it is no good
+                        for (Identifier excludedFlavor :
+                                flavor.getRight().exclusions) {
+                            if (flavors.containsKey(excludedFlavor)) {
+                                badResult = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(!badResult){
+                        //if any existing flavors exclude this flavor, it is no good
+                        for(Map.Entry<Identifier,FlavorData> existingFlavor : flavors.entrySet()){
+                            if(existingFlavor.getValue().exclusions.contains(flavor.getLeft())){
+                                badResult = true;
+                            }
+                        }
+                    }
+                    if(badResult) {
+                        --i;
+                    }
+                    else{
+                        flavors.put(flavor.getLeft(), flavor.getRight());
+                    }
                 }
             }
 
@@ -388,7 +413,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
                 }
                 LavaJavaItem.addFlavor(itemStack, flavor.getKey());
             }
-            int nuggets = basePrice + (int)(((positiveCost*(1+positiveCount)/2f) - (negativeDiscount*negativeCount)) / 4);
+            int nuggets = Math.max(1,basePrice + (int)(((positiveCost*(1+positiveCount)/2f) - (negativeDiscount*negativeCount)) / 4));
             int ingots = 0;
             if(nuggets > 64){
                 ingots = Math.min(nuggets / 9, 64);

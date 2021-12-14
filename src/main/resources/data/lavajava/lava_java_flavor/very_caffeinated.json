@@ -6,5 +6,9 @@
   "magnitude": 1,
   "weight": 4,
   "value": 30,
-  "namePriority": 1
+  "namePriority": 1,
+  "exclusions": [
+    "lavajava:extra_caffeinated",
+    "lavajava:caffeinated"
+  ]
 }
