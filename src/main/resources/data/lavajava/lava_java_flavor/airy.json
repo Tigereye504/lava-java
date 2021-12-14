@@ -6,5 +6,9 @@
   "magnitude": 0,
   "weight": 30,
   "value": 15,
-  "namePriority": 0
+  "namePriority": 0,
+  "exclusions": [
+    "lavajava:extra_airy",
+    "lavajava:very_airy"
+  ]
 }

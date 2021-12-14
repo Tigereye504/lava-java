@@ -1,5 +1,7 @@
 package net.tigereye.lavajava.flavor;
 
+import com.google.gson.JsonArray;
+
 public class FlavorJsonFormat {
     String flavorID;
     String statusID;
@@ -9,4 +11,5 @@ public class FlavorJsonFormat {
     int weight;
     int value;
     int namePriority;
+    JsonArray exclusions;
 }
