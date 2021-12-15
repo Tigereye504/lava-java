@@ -40,5 +40,5 @@ Lava Java uses datapacks to determine the flavors that drinks can have. It looks
 
 **namePriority**: currently does nothing. This is optional. If provided, must be an integer. Default value is 0. Once implemented, it will determine the order that flavors are listed in a Lava Java's name. Higher priorities will be listed later in the drinks name (a Sweet Spicy Lava Java rather than a Spicy Sweet Lava Java)
 
-**exclusions**: is a list of flavorIDs that prevents this flavor from co-existing with the listed flavors. This is optional. If it would be selected but an excluded flavor was first, or if an excluded flavor has been selected but it had been selected first, than the second flavor will be rerolled. _These flavors do not need to exist._ This allows you to exclude flavors that come from other mods, even if you do not use that mod as a dependency.
+**exclusions**: a list of flavorIDs that prevents this flavor from co-existing with the listed flavors. This is optional. If it would be selected but an excluded flavor was first, or if an excluded flavor has been selected but it had been selected first, than the second flavor will be rerolled. _These flavors do not need to exist._ This allows you to exclude flavors that come from other mods, even if you do not use that mod as a dependency.
 
