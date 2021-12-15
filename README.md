@@ -42,3 +42,5 @@ Lava Java uses datapacks to determine the flavors that drinks can have. It looks
 
 **exclusions**: a list of flavorIDs that prevents this flavor from co-existing with the listed flavors. This is optional. If it would be selected but an excluded flavor was first, or if an excluded flavor has been selected but it had been selected first, than the second flavor will be rerolled. _These flavors do not need to exist._ This allows you to exclude flavors that come from other mods, even if you do not use that mod as a dependency.
 
+Once you have created your flavor, add a line to your language file in the format `"flavor.spellbound.bubbly": "Bubbly",` to set the display name of the flavor.
+
