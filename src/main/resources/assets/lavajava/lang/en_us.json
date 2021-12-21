@@ -36,5 +36,10 @@
     "text.autoconfig.lavajava.option.CAFE_REFRESH_PERIOD": "Cafe refresh period in ticks",
     "text.autoconfig.lavajava.option.MAX_BARISTAS_PER_CAFE": " Maximum baristas per cafe",
     "text.autoconfig.lavajava.option.CAFE_AVERAGE_DISTANCE_CHUNKS": "Average chunks between cafes",
-    "text.autoconfig.lavajava.option.CAFE_MINIMUM_DISTANCE_CHUNKS": "Minimum chunks between cafes"
+    "text.autoconfig.lavajava.option.CAFE_MINIMUM_DISTANCE_CHUNKS": "Minimum chunks between cafes",
+    "text.lavajava.temperature.boiling": "It's boiling!",
+    "text.lavajava.temperature.hot": "It's hot.",
+    "text.lavajava.temperature.warm": "It's warm.",
+    "text.lavajava.temperature.tepid": "It's tepid.",
+    "text.lavajava.temperature.stale": "It's stale."
 }

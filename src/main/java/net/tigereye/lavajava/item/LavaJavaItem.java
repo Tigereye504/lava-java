@@ -127,12 +127,12 @@ public class LavaJavaItem extends Item {
         if(nbtCompound.contains("Lava_Java_Brew_Time")) {
             float temperature = calculateTemperature(stack, world.getTime());
             String temperatureText;
-            if (temperature >= BOILING_TEMPERATURE) temperatureText = "***Boiling***";
-            else if (temperature >= HOT_TEMPERATURE) temperatureText = "**Hot**";
-            else if (temperature >= WARM_TEMPERATURE) temperatureText = "*Warm*";
-            else if (temperature >= TEPID_TEMPERATURE) temperatureText = "Tepid";
-            else temperatureText = "...stale";
-            tooltip.add(new LiteralText(temperatureText));
+            if (temperature >= BOILING_TEMPERATURE) temperatureText = "boiling";//"***Boiling***";
+            else if (temperature >= HOT_TEMPERATURE) temperatureText = "hot";//""**Hot**";
+            else if (temperature >= WARM_TEMPERATURE) temperatureText = "warm";//"*Warm*";
+            else if (temperature >= TEPID_TEMPERATURE) temperatureText = "tepid";//"Tepid";
+            else temperatureText = "stale";//"...stale";
+            tooltip.add(new TranslatableText("text.lavajava.temperature."+temperatureText));//new LiteralText(temperatureText));
         }
     }
 
