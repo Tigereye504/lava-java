@@ -7,7 +7,7 @@
     "flavor.lavajava.light": "Ligero",
     "flavor.lavajava.pumpkin_spice": "Especias de Calabaza",
     "flavor.lavajava.soothing": "Calmante",
-    "flavor.lavajava.spicy": "Fuerte",
+    "flavor.lavajava.spicy": "Picante",
     "flavor.lavajava.sweet": "Dulce",
     "flavor.lavajava.thick": "Espeso",
     "flavor.lavajava.filling": "Llenador",
@@ -17,7 +17,7 @@
     "flavor.lavajava.extra_light": "Extra Ligero",
     "flavor.lavajava.extra_pumpkin_spice": "Especias de Calabaza Extra",
     "flavor.lavajava.extra_soothing": "Extra Calmante",
-    "flavor.lavajava.extra_spicy": "Extra Fuerte",
+    "flavor.lavajava.extra_spicy": "Extra Picante",
     "flavor.lavajava.extra_sweet": "Extra Dulce",
     "flavor.lavajava.extra_thick": "Extra Espeso",
     "flavor.lavajava.extra_filling": "Extra Llenador",
@@ -26,7 +26,7 @@
     "flavor.lavajava.very_light": "Muy Ligero",
     "flavor.lavajava.very_pumpkin_spice": "Especias de Calabaza Fuertes",
     "flavor.lavajava.very_soothing": "Muy Calmante",
-    "flavor.lavajava.very_spicy": "Muy Fuerte",
+    "flavor.lavajava.very_spicy": "Muy Picante",
     "flavor.lavajava.very_sweet": "Muy Dulce",
     "flavor.lavajava.very_thick": "Muy Espeso",
     "flavor.lavajava.very_filling": "Muy Llenador",
@@ -43,3 +43,4 @@
     "text.lavajava.temperature.tepid": "Est\u00e1 al clima.",
     "text.lavajava.temperature.stale": "Est\u00e1 tieso."
 }
+
