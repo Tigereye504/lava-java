@@ -4,7 +4,7 @@
 
   "elements": [
     {
-      "weight": 2,
+      "weight": 8,
       "element": {
         "location": "lavajava:lava_java_cafe",
         "processors": "minecraft:empty",
@@ -13,7 +13,7 @@
       }
     },
     {
-      "weight": 2,
+      "weight": 10,
       "element": {
         "location": "lavajava:lava_java_cafe_classic_camilo",
         "processors": "minecraft:empty",
@@ -31,7 +31,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 5,
       "element": {
         "location": "lavajava:lava_java_cafe_crimson_matcha",
         "processors": "minecraft:empty",
@@ -40,7 +40,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 5,
       "element": {
         "location": "lavajava:lava_java_cafe_soul_camilo",
         "processors": "minecraft:empty",
@@ -49,7 +49,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 5,
       "element": {
         "location": "lavajava:lava_java_cafe_tent_matcha",
         "processors": "minecraft:empty",

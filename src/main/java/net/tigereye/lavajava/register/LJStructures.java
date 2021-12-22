@@ -31,27 +31,12 @@ public class LJStructures {
         // It has many options to make sure your structure will spawn and work properly.
         // Give it your structure and the identifier you want for it.
         FabricStructureBuilder.create(new Identifier(LavaJava.MODID, "lava_java_cafe"), LAVA_JAVA_CAFE)
-
-                /* Generation stage for when to generate the structure. there are 10 stages you can pick from!
-                   This surface structure stage places the structure before plants and ores are generated. */
                 .step(GenerationStep.Feature.SURFACE_STRUCTURES)
-
                 .defaultConfig(new StructureConfig(
                         LavaJava.config.CAFE_AVERAGE_DISTANCE_CHUNKS, /* average distance apart in chunks between spawn attempts */
                         LavaJava.config.CAFE_MINIMUM_DISTANCE_CHUNKS, /* minimum distance apart in chunks between spawn attempts. MUST BE LESS THAN ABOVE VALUE */
                         225170915 /* this modifies the seed of the structure so no two structures always spawn over each-other. Make this large and unique. */))
-
-                /*
-                 * Whether surrounding land will be modified automatically to conform to the bottom of the structure.
-                 * Basically, it adds land at the base of the structure like it does for Villages and Outposts.
-                 * Doesn't work well on structure that have pieces stacked vertically or change in heights.
-                 *
-                 * Note: The air space this method will create will be filled with water if the structure is below sealevel.
-                 * This means this is best for structure above sealevel so keep that in mind.
-                 */
                 .adjustsSurface()
-
-                /* Finally! Now we register our structure and everything above will take effect. */
                 .register();
 
 

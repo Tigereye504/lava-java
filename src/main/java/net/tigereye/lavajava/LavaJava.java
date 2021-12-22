@@ -67,7 +67,6 @@ public class LavaJava implements ModInitializer {
 				BiomeSelectors.categories(Biome.Category.NETHER),
 				RegistryKey.of(Registry.CONFIGURED_STRUCTURE_FEATURE_KEY,
 						BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.getId(LJConfiguredStructures.CONFIGURED_LAVA_JAVA_CAFE))
-
 		);
 
 	}

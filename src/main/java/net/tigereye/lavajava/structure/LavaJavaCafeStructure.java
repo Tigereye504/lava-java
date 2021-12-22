@@ -114,16 +114,7 @@ public class LavaJavaCafeStructure extends StructureFeature<StructurePoolFeature
     }
 
     public static Optional<StructurePiecesGenerator<StructurePoolFeatureConfig>> createPiecesGenerator(StructureGeneratorFactory.Context<StructurePoolFeatureConfig> context) {
-        // Turns the chunk coordinates into actual coordinates we can use. (Gets center of that chunk)
         BlockPos blockpos = context.chunkPos().getCenterAtY(31);
-
-        /*
-         * If you are doing Nether structures, you'll probably want to spawn your structure on top of ledges.
-         * Best way to do that is to use getColumnSample to grab a column of blocks at the structure's x/z position.
-         * Then loop through it and look for land with air above it and set blockpos's Y value to it.
-         * Make sure to set the final boolean in StructurePoolBasedGenerator.generate to false so
-         * that the structure spawns at blockpos's y value instead of placing the structure on the Bedrock roof!
-         */
         VerticalBlockSample blockView = context.chunkGenerator().getColumnSample(blockpos.getX(), blockpos.getZ(), context.world());
 
         //First, find the lowest platform that a Lava Java Cafe can be built upon
@@ -134,30 +125,11 @@ public class LavaJavaCafeStructure extends StructureFeature<StructurePoolFeature
             }
         }
 
-        /*
-         * The only reason we are using StructurePoolFeatureConfig here is because further down, we are using
-         * StructurePoolBasedGenerator.generate which requires StructurePoolFeatureConfig. However, if you create your own
-         * StructurePoolBasedGenerator.generate, you could reduce the amount of workarounds like above that you need
-         * and give yourself more opportunities and control over your structures.
-         *
-         * An example of a custom StructurePoolBasedGenerator.generate in action can be found here (warning, it is using Mojmap mappings):
-         * https://github.com/TelepathicGrunt/RepurposedStructures-Fabric/blob/1.18/src/main/java/com/telepathicgrunt/repurposedstructures/world/structures/pieces/PieceLimitedJigsawManager.java
-         */
         StructurePoolFeatureConfig newConfig = new StructurePoolFeatureConfig(
-                // The path to the starting Template Pool JSON file to read.
-                //
-                // Note, this is "structure_tutorial:run_down_house/start_pool" which means
-                // the game will automatically look into the following path for the template pool:
-                // "resources/data/structure_tutorial/worldgen/template_pool/run_down_house/start_pool.json"
-                // This is why your pool files must be in "data/<modid>/worldgen/template_pool/<the path to the pool here>"
-                // because the game automatically will check in worldgen/template_pool for the pools.
                 () -> context.registryManager().get(Registry.STRUCTURE_POOL_KEY)
                         .get(new Identifier(LavaJava.MODID, "lava_java_cafe/start_pool")),
-
                 // How many pieces outward from center can a recursive jigsaw structure spawn.
                 // Our structure is only 1 piece outward and isn't recursive so any value of 1 or more doesn't change anything.
-                // However, I recommend you keep this a decent value like 7 so people can use datapacks to add additional pieces to your structure easily.
-                // But don't make it too large for recursive structures like villages or you'll crash server due to hundreds of pieces attempting to generate!
                 10
         );
 
