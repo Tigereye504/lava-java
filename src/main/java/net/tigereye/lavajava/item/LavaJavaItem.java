@@ -139,7 +139,7 @@ public class LavaJavaItem extends Item {
     public boolean hasGlint(ItemStack stack) {
         return false;
     }
-
+    /*
     public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
         //TODO: understand what this is doing
         if (this.isIn(group)) {
@@ -154,6 +154,7 @@ public class LavaJavaItem extends Item {
         }
 
     }
+    */
 
     public static void addFlavor(ItemStack item, Identifier flavor){
         NbtCompound nbtCompound = item.getOrCreateNbt();

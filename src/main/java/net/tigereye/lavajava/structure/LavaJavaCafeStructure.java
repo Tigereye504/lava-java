@@ -24,6 +24,8 @@ import org.apache.logging.log4j.Level;
 import java.util.Optional;
 
 public class LavaJavaCafeStructure extends StructureFeature<StructurePoolFeatureConfig>    {
+    //when designing variants of this structure, use the following (with proper position and facing) to set up the loot barrels
+    //setblock 30 -60 -37 minecraft:barrel[facing=east]{LootTable:"lavajava:chests/lava_java_cafe_barrel"} replace
 
     public LavaJavaCafeStructure(Codec<StructurePoolFeatureConfig> codec) {
         super(codec, (context) -> {
@@ -82,6 +84,7 @@ public class LavaJavaCafeStructure extends StructureFeature<StructurePoolFeature
     private static boolean canGenerate(StructureGeneratorFactory.Context<StructurePoolFeatureConfig> context) {
         BlockPos spawnXZPosition = context.chunkPos().getCenterAtY(0);
 
+
         // Grab height of land. Will stop at first non-air block.
         int landHeight = context.chunkGenerator().getHeightInGround(spawnXZPosition.getX(), spawnXZPosition.getZ(), Heightmap.Type.WORLD_SURFACE_WG, context.world());
 
@@ -89,18 +92,30 @@ public class LavaJavaCafeStructure extends StructureFeature<StructurePoolFeature
         // In nether, it will be netherrack, lava, and air. End will only be endstone and air. It depends on what block
         // the chunk generator will place for that dimension.
         VerticalBlockSample columnOfBlocks = context.chunkGenerator().getColumnSample(spawnXZPosition.getX(), spawnXZPosition.getZ(), context.world());
+        //Cafes want to be as close to the lava lakes as they can be. Find the lowest platform that a Lava Java Cafe can be built upon
+        BlockPos blockpos = context.chunkPos().getCenterAtY(31);
+        for(int i = 31; i < context.world().getHeight();++i){
+            if(columnOfBlocks.getState(i).isAir() && columnOfBlocks.getState(i-1).isOpaque()){
+                blockpos = context.chunkPos().getCenterAtY(i-1);
+                break;
+            }
+        }
+        //Check that our chosen position is below the land height. If it is not, then we have violated the bedrock ceiling.
+        if(blockpos.getY() >= landHeight) return false;
+
 
         // Combine the column of blocks with land height and you get the top block itself which you can test.
-        BlockState topBlock = columnOfBlocks.getState(landHeight);
+        // For the cafe, I'm instead grabbing the block at my chosen height
+        BlockState chosenBlock = columnOfBlocks.getState(blockpos.getY());
 
         // Now we test to make sure our structure is not spawning on water or other fluids.
         // You can do height check instead too to make it spawn at high elevations.
-        return topBlock.getFluidState().isEmpty(); //landHeight > 100;
+        return chosenBlock.getFluidState().isEmpty() && columnOfBlocks.getState(blockpos.up().getY()).getFluidState().isEmpty(); //landHeight > 100;
     }
 
     public static Optional<StructurePiecesGenerator<StructurePoolFeatureConfig>> createPiecesGenerator(StructureGeneratorFactory.Context<StructurePoolFeatureConfig> context) {
         // Turns the chunk coordinates into actual coordinates we can use. (Gets center of that chunk)
-        BlockPos blockpos = context.chunkPos().getCenterAtY(0);
+        BlockPos blockpos = context.chunkPos().getCenterAtY(31);
 
         /*
          * If you are doing Nether structures, you'll probably want to spawn your structure on top of ledges.
@@ -111,12 +126,14 @@ public class LavaJavaCafeStructure extends StructureFeature<StructurePoolFeature
          */
         VerticalBlockSample blockView = context.chunkGenerator().getColumnSample(blockpos.getX(), blockpos.getZ(), context.world());
 
+        //First, find the lowest platform that a Lava Java Cafe can be built upon
         for(int i = 1; i < context.world().getHeight();++i){
             if(blockView.getState(i).isAir() && blockView.getState(i-1).isOpaque()){
                 blockpos = context.chunkPos().getCenterAtY(i-1);
                 break;
             }
         }
+
         /*
          * The only reason we are using StructurePoolFeatureConfig here is because further down, we are using
          * StructurePoolBasedGenerator.generate which requires StructurePoolFeatureConfig. However, if you create your own
