@@ -100,13 +100,13 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
     }
 
     @Override
-    public void setCurrentCustomer(@Nullable PlayerEntity customer) {
+    public void setCustomer(@Nullable PlayerEntity customer) {
         this.customer = customer;
     }
 
     @Nullable
     @Override
-    public PlayerEntity getCurrentCustomer() {
+    public PlayerEntity getCustomer() {
         return this.customer;
     }
 
@@ -204,7 +204,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
                 return ActionResult.success(this.world.isClient);
             } else {
                 if (!this.world.isClient) {
-                    this.setCurrentCustomer(player);
+                    this.setCustomer(player);
                     this.sendOffers(player, this.getDisplayName(), this.getLevel());
                 }
 
@@ -368,8 +368,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
             for (int i = 0; i < rolls; i++) {
                 Pair<Identifier, FlavorData> flavor = FlavorManager.getWeightedRandomFlavor(random);
                 if(flavor != null){
-                    boolean badResult = false;
-                    if(flavors.containsKey(flavor.getLeft())) badResult = true;
+                    boolean badResult = flavors.containsKey(flavor.getLeft());
                     if(!badResult) {
                         //if any existing flavors are excluded by this flavor, it is no good
                         for (Identifier excludedFlavor :

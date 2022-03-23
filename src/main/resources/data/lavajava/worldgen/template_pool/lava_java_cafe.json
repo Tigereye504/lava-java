@@ -1,7 +1,6 @@
 {
   "name": "lavajava:lava_java_cafe/start_pool",
   "fallback": "minecraft:empty",
-
   "elements": [
     {
       "weight": 8,

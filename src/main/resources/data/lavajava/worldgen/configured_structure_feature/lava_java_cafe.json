@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:bastion_remnant",
+  "biomes": "#minecraft:is_nether",
+  "adapt_noise": true,
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": [
+        {
+          "type": "minecraft:zombified_piglin",
+          "weight": 900,
+          "minCount": 1,
+          "maxCount": 3
+        },
+        {
+          "type": "lavajava:wither_barista",
+          "weight": 100,
+          "minCount": 1,
+          "maxCount": 1
+        },
+        {
+          "type": "minecraft:wither_skeleton",
+          "weight": 10,
+          "minCount": 1,
+          "maxCount": 3
+        },
+        {
+          "type": "minecraft:skeleton",
+          "weight": 1,
+          "minCount": 15,
+          "maxCount": 50
+        }
+      ]
+    }
+  },
+  "config": {
+    "start_pool": "lavajava:lava_java_cafe",
+    "size": 1
+  }
+}

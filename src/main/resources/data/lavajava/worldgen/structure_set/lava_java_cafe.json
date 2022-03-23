@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "lavajava:lava_java_cafe",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 10,
+    "separation": 4,
+    "salt": 225170915
+  }
+}
