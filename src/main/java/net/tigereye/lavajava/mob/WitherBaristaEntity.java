@@ -35,15 +35,16 @@ import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOfferList;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.world.*;
-import net.minecraft.world.biome.BiomeKeys;
-import net.minecraft.world.gen.random.ChunkRandom;
 import net.tigereye.lavajava.LavaJava;
 import net.tigereye.lavajava.flavor.*;
 import net.tigereye.lavajava.item.LavaJavaItem;
 import net.tigereye.lavajava.register.LJItems;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.util.math.random.Random;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchant {
     public static final float HEIGHT =2.4f;
@@ -81,15 +82,15 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
     protected void initGoals() {
         this.goalSelector.add(2, new AvoidSunlightGoal(this));
         this.goalSelector.add(3, new EscapeSunlightGoal(this, 1.0D));
-        this.goalSelector.add(3, new FleeEntityGoal(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.add(3, new FleeEntityGoal<>(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.add(5, new WanderAroundFarGoal(this, 1.0D));
         this.goalSelector.add(4, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.add(6, new LookAroundGoal(this));
-        this.targetSelector.add(1, new RevengeGoal(this, new Class[0]));
+        this.targetSelector.add(1, new RevengeGoal(this));
     }
 
     @Override
-    protected void initEquipment(LocalDifficulty difficulty) {
+    protected void initEquipment(Random random, LocalDifficulty difficulty) {
     }
 
     public boolean canSpawn(WorldAccess world, SpawnReason spawnReason) {

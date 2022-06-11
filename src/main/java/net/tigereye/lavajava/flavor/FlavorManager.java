@@ -6,13 +6,16 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import net.minecraft.util.math.random.Random;
 import net.tigereye.lavajava.LavaJava;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class FlavorManager implements SimpleSynchronousResourceReloadListener {
 
@@ -39,8 +42,8 @@ public class FlavorManager implements SimpleSynchronousResourceReloadListener {
         negativeFlavorReferenceMap.clear();
         negativeWeight = 0;
         LavaJava.LOGGER.info("Loading Lava Java Flavors.");
-        for(Identifier id : manager.findResources(RESOURCE_LOCATION, path -> path.endsWith(".json"))) {
-            try(InputStream stream = manager.getResource(id).getInputStream()) {
+        manager.findResources(RESOURCE_LOCATION, path -> path.getPath().endsWith(".json")).forEach((id,resource) -> {
+            try(InputStream stream = resource.getInputStream()) {
                 Reader reader = new InputStreamReader(stream);
                 Pair<Identifier,FlavorData> flavorDataPair = SERIALIZER.read(id,new Gson().fromJson(reader,FlavorJsonFormat.class));
                 if(flavorReferenceMap.containsKey(flavorDataPair.getLeft())){
@@ -60,7 +63,7 @@ public class FlavorManager implements SimpleSynchronousResourceReloadListener {
             } catch(Exception e) {
                 LavaJava.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
             }
-        }
+        });
         LavaJava.LOGGER.info("Loaded "+ flavorReferenceMap.size()+" Lava Java Flavors.");
     }
 

@@ -8,20 +8,14 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.nbt.*;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionUtil;
-import net.minecraft.potion.Potions;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import net.tigereye.lavajava.LavaJava;
@@ -30,7 +24,6 @@ import net.tigereye.lavajava.util.LavaJavaUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class LavaJavaItem extends Item {
@@ -76,7 +69,7 @@ public class LavaJavaItem extends Item {
             }
         }
 
-        world.emitGameEvent(user, GameEvent.DRINKING_FINISH, user.getCameraBlockPos());
+        world.emitGameEvent(user, GameEvent.DRINK, user.getCameraPosVec(0));
         return stack;
     }
 
@@ -111,7 +104,7 @@ public class LavaJavaItem extends Item {
         //TODO: sort flavors by priority in name
 
 
-        return new TranslatableText(this.getTranslationKey(stack));
+        return Text.translatable(this.getTranslationKey(stack));
     }
 
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
@@ -121,7 +114,7 @@ public class LavaJavaItem extends Item {
         NbtCompound flavorNbt = nbtCompound.getCompound("Lava_Java_Flavors");
         for(String id : flavorNbt.getKeys()){
             String[] splitid = id.split(":");
-            TranslatableText text = new TranslatableText("flavor." + splitid[0] + "." + splitid[1]);
+            MutableText text = Text.translatable("flavor." + splitid[0] + "." + splitid[1]);
             tooltip.add(text);
         }
         if(nbtCompound.contains("Lava_Java_Brew_Time")) {
@@ -132,29 +125,13 @@ public class LavaJavaItem extends Item {
             else if (temperature >= WARM_TEMPERATURE) temperatureText = "warm";//"*Warm*";
             else if (temperature >= TEPID_TEMPERATURE) temperatureText = "tepid";//"Tepid";
             else temperatureText = "stale";//"...stale";
-            tooltip.add(new TranslatableText("text.lavajava.temperature."+temperatureText));//new LiteralText(temperatureText));
+            tooltip.add(Text.translatable("text.lavajava.temperature."+temperatureText));//new LiteralText(temperatureText));
         }
     }
 
     public boolean hasGlint(ItemStack stack) {
         return false;
     }
-    /*
-    public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks) {
-        //TODO: understand what this is doing
-        if (this.isIn(group)) {
-            Iterator var3 = Registry.POTION.iterator();
-
-            while(var3.hasNext()) {
-                Potion potion = (Potion)var3.next();
-                if (potion != Potions.EMPTY) {
-                    stacks.add(PotionUtil.setPotion(new ItemStack(this), potion));
-                }
-            }
-        }
-
-    }
-    */
 
     public static void addFlavor(ItemStack item, Identifier flavor){
         NbtCompound nbtCompound = item.getOrCreateNbt();

@@ -16,6 +16,4 @@ public class FlavorData {
     public int value;
     public int namePriority;
     public List<Identifier> exclusions;
-    //TODO: implement exclusions in FlavorSerializer
-    //TODO: check for exclusions when generating Lava Javas, re-roll if found
 }

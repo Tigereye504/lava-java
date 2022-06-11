@@ -1,7 +1,7 @@
 {
-  "type": "minecraft:bastion_remnant",
+  "type": "minecraft:jigsaw",
   "biomes": "#minecraft:is_nether",
-  "adapt_noise": true,
+  "step": "underground_structures",
   "spawn_overrides": {
     "monster": {
       "bounding_box": "full",
@@ -33,8 +33,18 @@
       ]
     }
   },
-  "config": {
-    "start_pool": "lavajava:lava_java_cafe",
-    "size": 1
-  }
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "lavajava:lava_java_cafe",
+  "size": 1,
+  "start_height": {
+    "type": "minecraft:biased_to_bottom",
+    "min_inclusive": {
+      "absolute": 31
+    },
+    "max_inclusive": {
+      "below_top": 0
+    }
+  },
+  "max_distance_from_center": 1,
+  "use_expansion_hack": false
 }
