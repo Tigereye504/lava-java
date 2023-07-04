@@ -3,7 +3,6 @@ package net.tigereye.lavajava.mob;
 import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -12,11 +11,11 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -27,9 +26,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.village.Merchant;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOfferList;
@@ -219,7 +216,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
     @Override
     protected void mobTick() {
         if (!this.hasCustomer()) {
-            int expToLevel = 0;
+            int expToLevel;
             if(level < MAX_LEVEL){
                 expToLevel = LEVEL_BASE_EXPERIENCE[level];
             }
@@ -291,7 +288,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
 
     public static final Int2ObjectMap<TradeOffers.Factory[]> WITHER_BARISTA_TRADES;
     private static Int2ObjectMap<TradeOffers.Factory[]> copyToFastUtilMap(ImmutableMap<Integer, TradeOffers.Factory[]> map) {
-        return new Int2ObjectOpenHashMap(map);
+        return new Int2ObjectOpenHashMap<>(map);
     }
     static {
         WITHER_BARISTA_TRADES = copyToFastUtilMap(ImmutableMap.of(
@@ -322,12 +319,8 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
         private final int experience;
         private final float multiplier;
 
-        public SellItemFactory(Block block, int price, int count, int maxUses, int experience) {
-            this(new ItemStack(block), price, count, maxUses, experience);
-        }
-
-        public SellItemFactory(Item item, int price, int count, int experience) {
-            this((ItemStack)(new ItemStack(item)), price, count, 12, experience);
+        public SellItemFactory(ItemConvertible itemConvertible, int price, int count, int maxUses, int experience) {
+            this(itemConvertible.asItem(), price, count, maxUses, experience);
         }
 
         public SellItemFactory(Item item, int price, int count, int maxUses, int experience) {

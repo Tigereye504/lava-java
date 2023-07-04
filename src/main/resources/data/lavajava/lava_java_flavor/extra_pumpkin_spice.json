@@ -6,7 +6,7 @@
   "magnitude": 0,
   "weight": 4,
   "value": 30,
-  "namePriority": 2,
+  "namePriority": 5,
   "exclusions": [
     "lavajava:pumpkin_spice",
     "lavajava:very_pumpkin_spice"

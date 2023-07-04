@@ -1,6 +1,10 @@
 {
-    "item.lavajava.lava_java": "Lava Java",
+    "item.lavajava.lava_java": "%1$s%2$sLava Java",
     "entity.lavajava.wither_barista": "Wither Barista",
+    "size.lavajava.0": "Empty ",
+    "size.lavajava.1": "",
+    "size.lavajava.2": "Grande ",
+    "size.lavajava.3": "Venti ",
     "flavor.lavajava.airy": "Cloudy",
     "flavor.lavajava.caffeinated": "Caffeinated",
     "flavor.lavajava.creamy": "Creamy",

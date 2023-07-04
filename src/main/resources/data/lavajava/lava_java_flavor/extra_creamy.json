@@ -6,7 +6,7 @@
   "magnitude": 0,
   "weight": 9,
   "value": 20,
-  "namePriority": 1,
+  "namePriority": 0,
   "exclusions": [
     "lavajava:creamy"
   ]

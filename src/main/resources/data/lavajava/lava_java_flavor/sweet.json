@@ -6,7 +6,7 @@
   "magnitude": 0,
   "weight": 45,
   "value": 5,
-  "namePriority": 1,
+  "namePriority": 0,
   "exclusions": [
     "lavajava:extra_sweet",
     "lavajava:very_sweet"

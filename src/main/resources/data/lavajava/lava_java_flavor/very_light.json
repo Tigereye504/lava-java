@@ -6,7 +6,7 @@
   "magnitude": 1,
   "weight": 2,
   "value": 40,
-  "namePriority": 2,
+  "namePriority": 0,
   "exclusions": [
     "lavajava:extra_light",
     "lavajava:light"

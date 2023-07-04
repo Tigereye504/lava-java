@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class LavaJavaItem extends Item {
     public static final float BOILING_TEMPERATURE = .85f;
@@ -95,21 +96,40 @@ public class LavaJavaItem extends Item {
     }
 
     public String getTranslationKey(ItemStack stack) {
-        //TODO: learn how to assemble a proper name
         return super.getTranslationKey();
     }
 
     public Text getName(ItemStack stack) {
         //TODO: read each flavor in the lava java and append it to the name, such as 'Filling Icy Minty Lava Java'
         //TODO: sort flavors by priority in name
-
-
-        return Text.translatable(this.getTranslationKey(stack));
+        NbtCompound nbtCompound = stack.getOrCreateNbt();
+        NbtCompound flavorNbt = nbtCompound.getCompound("Lava_Java_Flavors");
+        Set<String> flavorKeys = flavorNbt.getKeys();
+        Text size = Text.translatable("size.lavajava."+Integer.min(3, flavorKeys.size()));
+        Text flavor;
+        Identifier flavorID = null;
+        FlavorData data = null;
+        for(String id : flavorNbt.getKeys()){
+            Identifier nextFlavor = new Identifier(id);
+            FlavorData newData = FlavorManager.getFlavor(nextFlavor);
+            if(newData != null && (data == null
+                    || (newData.namePriority > data.namePriority)
+                    || (newData.namePriority == data.namePriority && newData.value > data.value))){
+                flavorID = nextFlavor;
+                data = newData;
+            }
+        }
+        if(flavorID == null){
+            flavor = Text.literal("");
+        }
+        else{
+            flavor = Text.literal(Text.translatable("flavor." + flavorID.getNamespace() + "." + flavorID.getPath()).getString()+" ");
+        }
+        return Text.translatable(this.getTranslationKey(stack),size,
+                flavor);
     }
 
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
-        //TODO: for now, flavors will be in the tooltip. This will change once I master TranslatableText nonsense.
-
         NbtCompound nbtCompound = stack.getOrCreateNbt();
         NbtCompound flavorNbt = nbtCompound.getCompound("Lava_Java_Flavors");
         for(String id : flavorNbt.getKeys()){
@@ -117,7 +137,7 @@ public class LavaJavaItem extends Item {
             MutableText text = Text.translatable("flavor." + splitid[0] + "." + splitid[1]);
             tooltip.add(text);
         }
-        if(nbtCompound.contains("Lava_Java_Brew_Time")) {
+        if(world != null && nbtCompound.contains("Lava_Java_Brew_Time")) {
             float temperature = calculateTemperature(stack, world.getTime());
             String temperatureText;
             if (temperature >= BOILING_TEMPERATURE) temperatureText = "boiling";//"***Boiling***";
