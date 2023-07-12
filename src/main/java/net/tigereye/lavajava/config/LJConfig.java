@@ -2,7 +2,6 @@ package net.tigereye.lavajava.config;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.tigereye.lavajava.LavaJava;
 
 @Config(name = LavaJava.MODID)
