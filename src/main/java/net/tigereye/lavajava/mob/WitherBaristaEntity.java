@@ -114,7 +114,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
 
 
     protected void fillRecipes() {
-        if(world.isClient()){
+        if(getWorld().isClient()){
             return;
         }
         TradeOffers.Factory[] factorys = WITHER_BARISTA_TRADES.get(1);
@@ -132,7 +132,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
             i++;
             factorys = WITHER_BARISTA_TRADES.get(Math.min(i,MAX_LEVEL));
         }
-        this.lastShopRefresh = world.getTime()/ LavaJava.config.CAFE_REFRESH_PERIOD;
+        this.lastShopRefresh = getWorld().getTime()/ LavaJava.config.CAFE_REFRESH_PERIOD;
     }
 
     @Override
@@ -162,14 +162,14 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
     protected void afterUsing(TradeOffer offer) {
         if (offer.shouldRewardPlayerExperience()) {
             int i = 3 + this.random.nextInt(4);
-            this.world.spawnEntity(new ExperienceOrbEntity(this.world, this.getX(), this.getY() + 0.5D, this.getZ(), i));
+            this.getWorld().spawnEntity(new ExperienceOrbEntity(this.getWorld(), this.getX(), this.getY() + 0.5D, this.getZ(), i));
         }
 
     }
 
     @Override
     public void onSellingItem(ItemStack stack) {
-        if (!this.world.isClient && this.ambientSoundChance > -this.getMinAmbientSoundDelay() + 20) {
+        if (!this.getWorld().isClient && this.ambientSoundChance > -this.getMinAmbientSoundDelay() + 20) {
             this.ambientSoundChance = -this.getMinAmbientSoundDelay();
             this.playSound(this.getTradingSound(!stack.isEmpty()), this.getSoundVolume(), this.getSoundPitch());
         }
@@ -199,14 +199,14 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
             }
 
             if (this.getOffers().isEmpty()) {
-                return ActionResult.success(this.world.isClient);
+                return ActionResult.success(this.getWorld().isClient);
             } else {
-                if (!this.world.isClient) {
+                if (!this.getWorld().isClient) {
                     this.setCustomer(player);
                     this.sendOffers(player, this.getDisplayName(), this.getLevel());
                 }
 
-                return ActionResult.success(this.world.isClient);
+                return ActionResult.success(this.getWorld().isClient);
             }
         } else {
             return super.interactMob(player, hand);
@@ -229,7 +229,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
                 fillRecipes();
                 this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200, 2));
             }
-            if(world.getTime()/LavaJava.config.CAFE_REFRESH_PERIOD != this.lastShopRefresh) {
+            if(getWorld().getTime()/LavaJava.config.CAFE_REFRESH_PERIOD != this.lastShopRefresh) {
                 fillRecipes();
                 this.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 100, 2));
             }
@@ -260,7 +260,7 @@ public class WitherBaristaEntity extends WitherSkeletonEntity implements Merchan
 
     @Override
     public boolean isClient() {
-        return this.world.isClient();
+        return this.getWorld().isClient();
     }
 
     public void writeCustomDataToNbt(NbtCompound nbt) {
